@@ -530,6 +530,29 @@ class CharClassVisitor : public REmatchParserBaseVisitor {
     return 0;
   }
 
+  std::any visitLeftAssignation(REmatchParser::LeftAssignationContext *ctx) override {
+    CHAR_CLASS_VISITOR__INFO("visitLeftAssignation" << std::endl);
+    // Build the automaton for the alternation
+    open_variables_count++;
+    // Assign the codes from the variable
+    std::string var = ctx->varname()->getText();
+    std::bitset<64> op_code = vfact_ptr->open_code(var);
+    lva_ptr = std::make_unique<LogicalVA>(op_code);
+
+    return 0;
+  }
+
+   std::any visitRightAssignation(REmatchParser::RightAssignationContext *ctx) override {
+    CHAR_CLASS_VISITOR__INFO("visitRightAssignation" << std::endl);
+    // Assign the codes from the variable
+    std::string var = ctx->varname()->getText();
+    std::bitset<64> cl_code = vfact_ptr->close_code(var);
+    lva_ptr = std::make_unique<LogicalVA>(cl_code);
+
+    open_variables_count--;
+    return 0;
+  }
+
   std::any visitAtom(REmatchParser::AtomContext *ctx) override {
     CHAR_CLASS_VISITOR__INFO("visitAtom" << std::endl);
     visitChildren(ctx);

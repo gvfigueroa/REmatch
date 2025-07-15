@@ -65,6 +65,8 @@ public:
   /// Atomic VA
   LogicalVA(CharClass charclass);
 
+  LogicalVA(std::bitset<64> code);
+
   void destroy();
 
   /**

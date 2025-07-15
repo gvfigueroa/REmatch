@@ -33,6 +33,10 @@ public:
 
     virtual std::any visitAssignation(REmatchParser::AssignationContext *context) = 0;
 
+    virtual std::any visitLeftAssignation(REmatchParser::LeftAssignationContext *context) = 0;
+
+    virtual std::any visitRightAssignation(REmatchParser::RightAssignationContext *context) = 0;
+
     virtual std::any visitVarname(REmatchParser::VarnameContext *context) = 0;
 
     virtual std::any visitAtom(REmatchParser::AtomContext *context) = 0;

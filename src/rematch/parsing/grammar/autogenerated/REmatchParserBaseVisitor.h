@@ -43,6 +43,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitLeftAssignation(REmatchParser::LeftAssignationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitRightAssignation(REmatchParser::RightAssignationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitVarname(REmatchParser::VarnameContext *ctx) override {
     return visitChildren(ctx);
   }

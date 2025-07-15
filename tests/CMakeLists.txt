@@ -38,6 +38,7 @@ set(TEST_SOURCES
   library_interface/rematch_compile.cpp
   library_interface/rematch_functions.cpp
   library_interface/flags.cpp
+  library_interface/single_variables.cpp
   exceptions/anchor_inside_capture_exception.cpp
   exceptions/complex_query_exception.cpp
   exceptions/empty_word_capture_exception.cpp

@@ -17,9 +17,14 @@ group: parentheses | assignation | atom;
 parentheses: '(' alternation ')';
 
 assignation: '!' varname '{' alternation '}';
+
+leftAssignation: '!' '!' varname '{';
+
+rightAssignation: '}' varname '!' '!';
+
 varname: ALPHA (ALPHA | DIGIT)*;
 
-atom: characterClass | singleSharedAtom | literal | anchor;
+atom: leftAssignation | rightAssignation | characterClass | singleSharedAtom | literal | anchor;
 
 characterClass: '[' '^'? ccAtom+ ']';
 ccAtom: ccRange | sharedAtom | ccSingle;

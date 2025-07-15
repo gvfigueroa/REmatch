@@ -29,14 +29,44 @@ class VariableCatalog {
 
 	size_t size() {return variables_.size();}
 
+	size_t size_left() {return left_variables_.size();}
+
+	size_t size_right() {return right_variables_.size();}
+
 	std::string get_var(uint32_t position);
 
 	std::vector<std::string> variables() {return variables_;}
+
+	std::vector<std::string> left_variables() {return left_variables_;}
+
+	std::vector<std::string> right_variables() {return right_variables_;}
+
+	std::unordered_map<std::string, std::pair<uint_fast32_t, uint_fast32_t>> variable_balance() {return variable_balance_;}
 
 	int position(std::string var) const;
 
 	// Add a variable to the struct
 	void add(std::string var);
+
+	// Add a single variable to the struct
+	void add_single(std::string var, bool is_left);
+
+	// nested single variable
+	void set_nested(std::string var, uint_fast32_t left, uint_fast32_t right);
+
+	// void set_all_nested(uint_fast32_t left, uint_fast32_t right);
+
+	std::pair<uint_fast32_t, uint_fast32_t> get_nested(std::string var);
+
+	void quantity_nested(uint32_t value);
+
+	// Checks left hand side single variables
+	void check_left_side();
+
+	// Checks paired variables after merge
+	void check_edges();
+
+	void check_nested();
 
 	// Given a variable name outputs the corresponding opening bitset
 	std::bitset<64> open_code(std::string var);
@@ -54,6 +84,10 @@ class VariableCatalog {
 	// Merges the variables present in another VariableCatalog inplace
 	void merge(VariableCatalog &rhs);
 
+	void nested_alternation(VariableCatalog &rhs);
+
+	void nested_expr(VariableCatalog& rhs);
+
 	void merge_disjoint(VariableCatalog &rhs);
 
 	// Checks if a variable name is present
@@ -66,9 +100,23 @@ class VariableCatalog {
 
 	int& get_offset(int index) {return offsetMap[index];}
 
+	bool empty_word() {return empty_word_;}
+
+	void set_empty_word_value(bool value) {
+        empty_word_ = value;
+    }
+
  private:
 	// Ordered vector that stores the variables.
 	std::vector<std::string> variables_;
+	std::vector<std::string> left_variables_;
+	std::vector<std::string> right_variables_;
+
+	std::unordered_map<std::string, std::pair<uint_fast32_t, uint_fast32_t>> variable_balance_;
+
+	std::unordered_map<std::string, bool> var_empty_word_;
+
+	bool empty_word_ = true;
 
 	// Offset capturing optimization. Maps each opening and closing
 	// capture variable to its computed offset. Then it's a vector of size

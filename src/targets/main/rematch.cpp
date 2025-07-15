@@ -1,27 +1,33 @@
-#include "library_interface/rematch.hpp"
-#include <cstdlib>
 #include <iostream>
-#include <string_view>
+#include <string>
+#include "library_interface/rematch.hpp"
+// #include "library_interface/multi_regex.hpp"
+// #include "library_interface/regex.hpp"
 
-int main(int argc, char* argv[]) {
-  if (argc < 3) {
-    std::cerr << "Usage: " << argv[0] << " <pattern> <document>" << std::endl;
-    return EXIT_FAILURE;
+int main() {
+  std::string document = "+56 9 1234 5678";
+  // std::string document = "ababa";
+  std::string regex = "!!x{[+][0-9]+ !!y{[0-9]}x!! [0-9 ]*}y!![^0-9]";
+  // std::string regex = "!x{a}!x{b}";
+  // std::string regex = "!!x{a|b*}x!!"; // DUDA: válido?????
+  // std::string regex = "!x{a}a";
+  // std::string regex = "!x{!!y{a}}y!!";
+  // std::string regex = "!!x{.+!!y{@}x!!.+}y!!";
+  // std::string regex = "(!!x{)a}x!!";
+  // std::string regex = "!!x{a(a|b)";
+  // std::string regex = "}x!!{1,2}";
+  // std::string regex = "!!x{!!y{a}x!!}y!!";
+  std::vector<REMatch::Match> matches = REMatch::library_interface::findall(regex, document);
+  std::cout << "Document: " << document << std::endl;
+  std::cout << "Regex: " << regex << std::endl;
+  for (REMatch::Match& match: matches) {
+    std::cout << "Span x: [" << match.start("x") << ", " << match.end("x") << ">" << std::endl;
+    std::cout << "Span y: [" << match.start("y") << ", " << match.end("y") << ">" << std::endl;
   }
-  std::string pattern = argv[1];
-  std::string document = argv[2];
 
-  REMatch::Flags flags;
-  REMatch::Regex regex = REMatch::compile(pattern, flags);
-  std::unique_ptr<REMatch::MatchIterator> iterator = regex.finditer(document);
-
-  auto match = iterator->next();
-  auto variables = iterator->variables();
-  while (match != nullptr) {
-    for (auto& variable : variables)
-      std::cout << variable << ": \"" << match->group(variable) << "\" |" << match->start(variable) << "," << match->end(variable) <<  ">" << std::endl;
-    match = iterator->next();
-  }
-
-  return EXIT_SUCCESS;
+  // std::string pattern = "!!x{a}x!!!!x{b}x!!";
+  // std::string document = "ababa";
+  // auto regex = REMatch::MultiRegex(pattern);
+  // std::unique_ptr<REMatch::MultiMatch> match = regex.findone(document);
+  return 0;
 }

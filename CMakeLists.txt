@@ -13,7 +13,7 @@ if(NUM_CORES GREATER 1)
 endif()
 
 # Enable testing
-set(REMATCH_BUILD_TESTING OFF)
+set(REMATCH_BUILD_TESTING ON)
 # Enable profiling
 set(ENABLE_PROFILING OFF CACHE BOOL "Enable Profiling" FORCE)
 

@@ -21,6 +21,16 @@ LogicalVA::LogicalVA(CharClass charclass) {
   init_state_->add_filter(charclass, accepting_state_);
 }
 
+LogicalVA::LogicalVA(std::bitset<64> code) {
+  init_state_ = new_state();
+  init_state_->set_initial(true);
+
+  accepting_state_ = new_state();
+  accepting_state_->set_accepting(true);
+
+  init_state_->add_capture(code, accepting_state_);
+}
+
 LogicalVA::LogicalVA(const LogicalVA &A)
     : init_state_(nullptr) {
 

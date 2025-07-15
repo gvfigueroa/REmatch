@@ -22,13 +22,14 @@ public:
 
   enum {
     RuleRoot = 0, RuleAlternation = 1, RuleExpr = 2, RuleElement = 3, RuleGroup = 4, 
-    RuleParentheses = 5, RuleAssignation = 6, RuleVarname = 7, RuleAtom = 8, 
-    RuleCharacterClass = 9, RuleCcAtom = 10, RuleCcRange = 11, RuleCcSingle = 12, 
-    RuleCcLiteral = 13, RuleCcEscapes = 14, RuleCcOther = 15, RuleCcSpecial = 16, 
-    RuleSingleSharedAtom = 17, RuleLiteral = 18, RuleEscapes = 19, RuleSpecial = 20, 
-    RuleOther = 21, RuleSharedAtom = 22, RuleQuantifier = 23, RuleQuantity = 24, 
-    RuleQuantExact = 25, RuleQuantRange = 26, RuleQuantMin = 27, RuleQuantMax = 28, 
-    RuleNumber = 29, RuleAnchor = 30, RuleAnchorStart = 31, RuleAnchorEnd = 32
+    RuleParentheses = 5, RuleAssignation = 6, RuleLeftAssignation = 7, RuleRightAssignation = 8, 
+    RuleVarname = 9, RuleAtom = 10, RuleCharacterClass = 11, RuleCcAtom = 12, 
+    RuleCcRange = 13, RuleCcSingle = 14, RuleCcLiteral = 15, RuleCcEscapes = 16, 
+    RuleCcOther = 17, RuleCcSpecial = 18, RuleSingleSharedAtom = 19, RuleLiteral = 20, 
+    RuleEscapes = 21, RuleSpecial = 22, RuleOther = 23, RuleSharedAtom = 24, 
+    RuleQuantifier = 25, RuleQuantity = 26, RuleQuantExact = 27, RuleQuantRange = 28, 
+    RuleQuantMin = 29, RuleQuantMax = 30, RuleNumber = 31, RuleAnchor = 32, 
+    RuleAnchorStart = 33, RuleAnchorEnd = 34
   };
 
   explicit REmatchParser(antlr4::TokenStream *input);
@@ -55,6 +56,8 @@ public:
   class GroupContext;
   class ParenthesesContext;
   class AssignationContext;
+  class LeftAssignationContext;
+  class RightAssignationContext;
   class VarnameContext;
   class AtomContext;
   class CharacterClassContext;
@@ -187,6 +190,38 @@ public:
 
   AssignationContext* assignation();
 
+  class  LeftAssignationContext : public antlr4::ParserRuleContext {
+  public:
+    LeftAssignationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> EXCLAMAITON();
+    antlr4::tree::TerminalNode* EXCLAMAITON(size_t i);
+    VarnameContext *varname();
+    antlr4::tree::TerminalNode *L_CURLY();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  LeftAssignationContext* leftAssignation();
+
+  class  RightAssignationContext : public antlr4::ParserRuleContext {
+  public:
+    RightAssignationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *R_CURLY();
+    VarnameContext *varname();
+    std::vector<antlr4::tree::TerminalNode *> EXCLAMAITON();
+    antlr4::tree::TerminalNode* EXCLAMAITON(size_t i);
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RightAssignationContext* rightAssignation();
+
   class  VarnameContext : public antlr4::ParserRuleContext {
   public:
     VarnameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -207,6 +242,8 @@ public:
   public:
     AtomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    LeftAssignationContext *leftAssignation();
+    RightAssignationContext *rightAssignation();
     CharacterClassContext *characterClass();
     SingleSharedAtomContext *singleSharedAtom();
     LiteralContext *literal();
